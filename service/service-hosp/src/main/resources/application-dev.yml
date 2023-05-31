@@ -1,0 +1,16 @@
+server:
+  port: 8201
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:com/atguigu/syt/hosp/mapper/xml/*.xml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123123
+    url: jdbc:mysql://192.168.140.138:3306/guigu_syt_hosp?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
