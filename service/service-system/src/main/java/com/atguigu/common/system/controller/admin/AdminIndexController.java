@@ -9,6 +9,10 @@ import com.atguigu.common.util.tools.MD5;
 import com.atguigu.common.system.vo.LoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 @Api(tags = "后台登录管理")
 @RestController
 @RequestMapping("/admin/system/index")
@@ -30,6 +34,7 @@ public class AdminIndexController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    private Logger logger = LoggerFactory.getLogger("系统日志");
     /**
      * 登录
      * @return
@@ -58,6 +63,7 @@ public class AdminIndexController {
         String token = UUID.randomUUID().toString().replaceAll("-", "");
         redisTemplate.boundValueOps(token).set(sysUser,2, TimeUnit.HOURS);
         map.put("token",token);
+        logger.info("用户登录:" + loginVo.getUsername());
         return Result.ok(map);
     }
 

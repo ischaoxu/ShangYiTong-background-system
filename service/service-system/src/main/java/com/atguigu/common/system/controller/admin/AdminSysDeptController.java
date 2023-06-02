@@ -6,6 +6,8 @@ import com.atguigu.common.system.service.SysDeptService;
 import com.atguigu.common.util.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -14,6 +16,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/admin/system/sysDept")
 public class AdminSysDeptController {
+    private Logger logger = LoggerFactory.getLogger("系统日志");
 
     @Resource
     private SysDeptService sysDeptService;
@@ -49,6 +52,7 @@ public class AdminSysDeptController {
     @ApiOperation(value = "获取全部部门节点")
     @GetMapping("/findNodes")
     public Result findNodes() {
+        logger.info("获取全部部门节点");
         return Result.ok(sysDeptService.findNodes());
     }
 
