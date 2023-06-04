@@ -1,0 +1,21 @@
+server:
+  port: 8200
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: service-system
+          predicates: Path=/*/system/**
+          uri: lb://service-system
+        - id: service-hosp
+          predicates: Path=/*/hosp/**
+          uri: lb://service-hosp
+        - id: service-cmn
+          predicates: Path=/*/cmn/**
+          uri: lb://service-cmn
+    nacos:
+      discovery:
+        server-addr: 192.168.190.101:8848
