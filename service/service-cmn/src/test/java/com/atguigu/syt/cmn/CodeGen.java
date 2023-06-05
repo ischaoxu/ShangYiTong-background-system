@@ -1,4 +1,4 @@
-package syt;
+package com.atguigu.syt.cmn;
 
 /**
  * @author liuzhaoxu

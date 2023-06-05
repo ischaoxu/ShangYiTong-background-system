@@ -4,13 +4,15 @@ package com.atguigu.syt.cmn.service.impl;
 import com.atguigu.syt.cmn.mapper.RegionMapper;
 import com.atguigu.syt.cmn.service.RegionService;
 import com.atguigu.syt.model.cmn.Region;
+import com.atguigu.syt.vo.cmn.RegionExcelVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,5 +34,18 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
         });
 
         return regionList;
+    }
+
+    @Override
+    @Cacheable(value = "regionexcelvolist", unless="#result.size() == 0")
+    public List<RegionExcelVo> findRegionExcelVoList() {
+        List<RegionExcelVo> regionexcelvolist = new ArrayList<>();
+        List<Region> regionList = baseMapper.selectList(null);
+        regionList.forEach(region -> {
+            RegionExcelVo regionExcelVo = new RegionExcelVo();
+            BeanUtils.copyProperties(region,regionExcelVo);
+            regionexcelvolist.add(regionExcelVo);
+        });
+        return regionexcelvolist;
     }
 }

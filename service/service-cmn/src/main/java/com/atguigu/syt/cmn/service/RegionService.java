@@ -1,6 +1,7 @@
 package com.atguigu.syt.cmn.service;
 
 import com.atguigu.syt.model.cmn.Region;
+import com.atguigu.syt.vo.cmn.RegionExcelVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -24,5 +25,13 @@ public interface RegionService extends IService<Region> {
      */
 
     List<Region> findRegionListByParentCode(String parentCode);
+    /**
+     *  获取导出的地区数据字典
+     * @author liuzhaoxu
+     * @date 2023/6/5 10:32
+     * @return java.util.List<com.atguigu.syt.vo.cmn.RegionExcelVo>
+     */
+
+    List<RegionExcelVo> findRegionExcelVoList();
 
 }
