@@ -1,4 +1,4 @@
-package com.atguigu.syt.cmn.easyexcel;
+package com.atguigu.syt.cmn.easyexcel.test;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;

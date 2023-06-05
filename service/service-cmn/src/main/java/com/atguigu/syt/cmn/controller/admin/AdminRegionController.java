@@ -9,10 +9,8 @@ import com.atguigu.syt.vo.cmn.RegionExcelVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -48,7 +46,6 @@ public class AdminRegionController {
     @GetMapping("/exportData")
     public void downloadFailedUsingJson(HttpServletResponse response) throws IOException {
         List<RegionExcelVo> regionExcelVoList = regionService.findRegionExcelVoList();
-        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
@@ -57,4 +54,14 @@ public class AdminRegionController {
         EasyExcel.write(response.getOutputStream(), RegionExcelVo.class).sheet("数据字典").doWrite(regionExcelVoList);
 
     }
+
+
+    @ApiOperation(value = "导入")
+    @ApiImplicitParam(name = "file", value = "文件", required = true)
+    @PostMapping("/importData")
+    public Result importData(MultipartFile file) {
+        regionService.importData(file);
+        return Result.ok();
+    }
+
 }

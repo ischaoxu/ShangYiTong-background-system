@@ -3,6 +3,7 @@ package com.atguigu.syt.cmn.service;
 import com.atguigu.syt.model.cmn.Region;
 import com.atguigu.syt.vo.cmn.RegionExcelVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,4 +35,20 @@ public interface RegionService extends IService<Region> {
 
     List<RegionExcelVo> findRegionExcelVoList();
 
+    /**
+     *  导入数据字典
+     * @author liuzhaoxu
+     * @date 2023/6/5 11:33
+     * @param cachedDataList
+     */
+
+    void saveRegionExcelVoBatch(List<RegionExcelVo> cachedDataList);
+    /**
+     *  导入excel
+     * @author liuzhaoxu
+     * @date 2023/6/5 11:55
+     * @param file
+     */
+
+    void importData(MultipartFile file);
 }
