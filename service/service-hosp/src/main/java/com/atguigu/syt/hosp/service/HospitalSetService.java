@@ -26,5 +26,14 @@ public interface HospitalSetService extends IService<HospitalSet> {
      */
 
     Page<HospitalSet> selectPage(Long page, Long limit, HospitalSetQueryVo hospitalSetQueryVo);
+    /**
+     *  根据分配给医院的唯一标识获取医院信息
+     * @author liuzhaoxu
+     * @date 2023/6/7 18:54
+     * @param hoscode
+     * @return com.atguigu.syt.model.hosp.Hospital
+     */
+
+    HospitalSet getHospitalByHoscode(String hoscode);
 
 }

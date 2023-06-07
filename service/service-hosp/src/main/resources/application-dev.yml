@@ -6,6 +6,13 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:com/atguigu/syt/hosp/mapper/xml/*.xml
 spring:
+  data:
+    mongodb:
+      database: syt
+      host: 192.168.190.100
+      password: '123456'
+      port: 27017
+      username: atguigu
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 123456
@@ -21,4 +28,11 @@ spring:
 logging:
   level:
     root: info
+    org:
+      mongodb:
+        driver:
+          protocol:
+            command: debug
+  file:
+    path: hosp
 

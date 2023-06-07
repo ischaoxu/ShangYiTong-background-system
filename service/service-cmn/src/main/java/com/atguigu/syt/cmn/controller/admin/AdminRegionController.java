@@ -9,6 +9,8 @@ import com.atguigu.syt.vo.cmn.RegionExcelVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,7 @@ import java.util.List;
  * @author atguigu
  * @since 2023-06-04
  */
+@Slf4j
 @Api(tags = "地区")
 @RestController
 @RequestMapping("/admin/cmn/region")
@@ -45,13 +48,22 @@ public class AdminRegionController {
     @ApiOperation(value = "导出")
     @GetMapping("/exportData")
     public void downloadFailedUsingJson(HttpServletResponse response) throws IOException {
-        List<RegionExcelVo> regionExcelVoList = regionService.findRegionExcelVoList();
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setCharacterEncoding("utf-8");
-        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-        String fileName = URLEncoder.encode("数据字典", "UTF-8").replaceAll("\\+", "%20");
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-        EasyExcel.write(response.getOutputStream(), RegionExcelVo.class).sheet("数据字典").doWrite(regionExcelVoList);
+
+        try {
+            List<RegionExcelVo> regionExcelVoList = regionService.findRegionExcelVoList();
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = URLEncoder.encode("数据字典", "UTF-8").replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+            EasyExcel.write(response.getOutputStream(), RegionExcelVo.class).sheet("数据字典").doWrite(regionExcelVoList);
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            response.reset();
+            response.setContentType("text/html");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().println("导出失败");
+        }
 
     }
 
