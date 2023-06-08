@@ -38,5 +38,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentPage;
     }
 
+    @Override
+    public void deleteDepartment(Map<String, Object> paramMap) {
+        String hoscode = (String) paramMap.get("hoscode");
+        String depcode = (String) paramMap.get("depcode");
+        Department department = departmentRepository.findByHoscodeAndDepcode(hoscode, depcode);
+        if (department != null) {
+            departmentRepository.deleteById(department.getId());
+        }
+    }
+
 
 }

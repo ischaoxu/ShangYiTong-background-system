@@ -45,4 +45,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         Example<Schedule> example = Example.of(schedule);
         return  scheduleRepository.findAll(example, PageRequest.of(page - 1, limit, sort));
     }
+
+    @Override
+    public void deleteSchedule(Map<String, Object> paramMap) {
+        String hoscode = (String) paramMap.get("hoscode");
+        String hosScheduleId = (String) paramMap.get("hosScheduleId");
+        Schedule schedule = scheduleRepository.findByHoscodeAndHosScheduleId(hoscode, hosScheduleId);
+        if (schedule != null) {
+            scheduleRepository.deleteById(schedule.getId());
+        }
+    }
 }

@@ -28,4 +28,14 @@ public interface ScheduleService {
      */
 
     Page<Schedule> listSchedulePage(Integer page, Integer limit, String hoscode);
+
+    /**
+     *  根据医院标识和排班id删除排班信息
+     * @author liuzhaoxu
+     * @date 2023/6/8 10:44
+     * @param paramMap
+     */
+
+    void deleteSchedule(Map<String, Object> paramMap);
+
 }

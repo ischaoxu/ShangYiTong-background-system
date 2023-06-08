@@ -28,4 +28,13 @@ public interface DepartmentService {
 
     Page<Department> getDepartmentList(int page, int limit, String hoscode);
 
+    /**
+     *  删除科室
+     * @author liuzhaoxu
+     * @date 2023/6/8 10:22
+     * @param paramMap
+     */
+    void deleteDepartment(Map<String, Object> paramMap);
+
+
 }

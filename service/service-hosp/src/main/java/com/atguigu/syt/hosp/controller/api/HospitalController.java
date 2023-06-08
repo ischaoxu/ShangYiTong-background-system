@@ -38,6 +38,7 @@ public class HospitalController {
     private HospitalService hospitalService;
     @Autowired
     private ScheduleService scheduleService;
+
     @ApiOperation("保存医院信息")
     @PostMapping("/saveHospital")
     public Result uploadhospitalData(HttpServletRequest request) {
@@ -45,11 +46,9 @@ public class HospitalController {
 //        验证数字签名
 //        获取密钥
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode((String) paramMap.get("hoscode"));
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
-        hospitalService.save(paramMap,hospital.getHoscode());
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        hospitalService.save(paramMap, hospital.getHoscode());
         return Result.ok();
     }
 
@@ -60,11 +59,9 @@ public class HospitalController {
 //        验证数字签名
 //        获取密钥
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode((String) paramMap.get("hoscode"));
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
-        departmentService.save(paramMap,hospital.getHoscode(),(String)paramMap.get("depcode"));
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        departmentService.save(paramMap, hospital.getHoscode(), (String) paramMap.get("depcode"));
         return Result.ok();
     }
 
@@ -75,11 +72,9 @@ public class HospitalController {
 //        验证数字签名
 //        获取密钥
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode((String) paramMap.get("hoscode"));
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
-        scheduleService.save(paramMap,hospital.getHoscode(),(String)paramMap.get("hosScheduleId"));
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        scheduleService.save(paramMap, hospital.getHoscode(), (String) paramMap.get("hosScheduleId"));
         return Result.ok();
     }
 
@@ -91,11 +86,9 @@ public class HospitalController {
 //        获取密钥
         String hoscode = (String) paramMap.get("hoscode");
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode(hoscode);
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
-        Hospital hospitalData =  hospitalService.findHospital(hoscode);
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        Hospital hospitalData = hospitalService.findHospital(hoscode);
         return Result.ok(hospitalData);
     }
 
@@ -107,16 +100,14 @@ public class HospitalController {
 //        获取密钥
         String hoscode = (String) paramMap.get("hoscode");
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode(hoscode);
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
 //        获取分页信息
 //        page
 //        limit
         Integer page = Integer.parseInt((String) paramMap.get("page"));
         Integer limit = Integer.parseInt((String) paramMap.get("limit"));
-        Page<Department> departmentList = departmentService.getDepartmentList(page,limit,hoscode);
+        Page<Department> departmentList = departmentService.getDepartmentList(page, limit, hoscode);
         return Result.ok(departmentList);
     }
 
@@ -128,19 +119,43 @@ public class HospitalController {
 //        获取密钥
         String hoscode = (String) paramMap.get("hoscode");
         HospitalSet hospital = hospitalSetService.getHospitalByHoscode(hoscode);
-//        计算摘要
-//        String sign = HttpRequestHelper.getSign(paramMap, hospital.getSignKey());
 //        对比摘要
-        HttpRequestHelper.checkSign(paramMap,  hospital.getSignKey());
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
 //        获取分页信息
 //        page
 //        limit
         Integer page = Integer.parseInt((String) paramMap.get("page"));
         Integer limit = Integer.parseInt((String) paramMap.get("limit"));
-        Page<Schedule> schedulePage = scheduleService.listSchedulePage(page,limit,hoscode);
+        Page<Schedule> schedulePage = scheduleService.listSchedulePage(page, limit, hoscode);
         return Result.ok(schedulePage);
     }
 
+    @ApiOperation("删除科室")
+    @PostMapping("/department/remove")
+    public Result removeDepartment(HttpServletRequest request) {
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(request.getParameterMap());
+//        验证数字签名
+//        获取密钥
+        String hoscode = (String) paramMap.get("hoscode");
+        HospitalSet hospital = hospitalSetService.getHospitalByHoscode(hoscode);
+//        对比摘要
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        departmentService.deleteDepartment(paramMap);
+        return Result.ok();
+    }
 
+    @ApiOperation("删除排班信息")
+    @PostMapping("/schedule/remove")
+    public Result removeSchedule(HttpServletRequest request) {
+        Map<String, Object> paramMap = HttpRequestHelper.switchMap(request.getParameterMap());
+//        验证数字签名
+//        获取密钥
+        String hoscode = (String) paramMap.get("hoscode");
+        HospitalSet hospital = hospitalSetService.getHospitalByHoscode(hoscode);
+//        对比摘要
+        HttpRequestHelper.checkSign(paramMap, hospital.getSignKey());
+        scheduleService.deleteSchedule(paramMap);
 
+        return Result.ok();
+    }
 }
