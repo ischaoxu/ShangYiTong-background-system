@@ -51,4 +51,13 @@ public interface RegionService extends IService<Region> {
      */
 
     void importData(MultipartFile file);
+    /**
+     *  获取国家统一编码对应地区名字
+     * @author liuzhaoxu
+     * @date 2023/6/9 18:15
+     * @param code
+     * @return java.lang.String
+     */
+
+    String getNameByCode(String code);
 }

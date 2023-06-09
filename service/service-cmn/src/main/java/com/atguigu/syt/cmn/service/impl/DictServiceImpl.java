@@ -7,6 +7,7 @@ import com.atguigu.syt.model.cmn.Dict;
 import com.atguigu.syt.model.cmn.DictType;
 import com.atguigu.syt.vo.cmn.DictTypeVo;
 import com.atguigu.syt.vo.cmn.DictVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -56,5 +57,17 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             DictTypeVos.add(typeVo);
         });
         return DictTypeVos;
+    }
+
+    @Override
+    public String getNameByDictTypeIdAndValue(Long dictTypeId, String value) {
+        LambdaQueryWrapper<Dict> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Dict::getDictTypeId, dictTypeId);
+        wrapper.eq(Dict::getValue, value);
+        Dict dict = baseMapper.selectOne(wrapper);
+        if (dict == null) {
+            return "";
+        }
+        return dict.getName();
     }
 }

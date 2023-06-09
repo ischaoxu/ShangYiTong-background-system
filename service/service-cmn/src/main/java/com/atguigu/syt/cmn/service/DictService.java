@@ -24,4 +24,14 @@ public interface DictService extends IService<Dict> {
 
     List<DictTypeVo> findAllDictList();
 
+    /**
+     *  获取数据字典名称
+     * @author liuzhaoxu
+     * @date 2023/6/9 18:11
+     * @param dictTypeId
+     * @param value
+     * @return java.lang.String
+     */
+
+    String getNameByDictTypeIdAndValue(Long dictTypeId, String value);
 }

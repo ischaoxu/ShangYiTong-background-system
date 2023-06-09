@@ -20,6 +20,8 @@
         <module>common</module>
         <module>service</module>
         <module>server-gateway</module>
+        <module>feign-client</module>
+        <module>feign-client/feign-cmn-client</module>
     </modules>
 
     <properties>

@@ -9,6 +9,10 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.190.101:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 127.0.0.1:8080
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 123456

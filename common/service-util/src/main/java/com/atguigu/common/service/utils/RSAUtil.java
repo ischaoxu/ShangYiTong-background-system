@@ -184,14 +184,16 @@ public class RSAUtil {
     }
 
     public static void main(String[] args) {
-        Map<String, String> keyMap = RSAUtil.createKeys(1024);
-        String  publicKey = keyMap.get("publicKey");
-        String  privateKey = keyMap.get("privateKey");
+//        Map<String, String> keyMap = RSAUtil.createKeys(1024);
+//        String  publicKey = keyMap.get("publicKey");
+        String  publicKey ="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDNQJQlC7i_fVjETITH_J6A8C_3OhADfdeXD188YeEPZHO_Z1WHu4BqEDwX6sP2GHKfjlzNcgwVWKSqYP-oiAYR9GbKq4-MSyQ1R-JWodaZoj8DRiebZB_t5FYu3He1G7sR5eZifpY0y5AwSK1EFnoW6_4sIxL20Bg0TuwOHIYIQIDAQAB";
+//        String  privateKey = keyMap.get("privateKey");
+        String  privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIM1AlCULuL99WMRMhMf8noDwL_c6EAN915cPXzxh4Q9kc79nVYe7gGoQPBfqw_YYcp-OXM1yDBVYpKpg_6iIBhH0Zsqrj4xLJDVH4lah1pmiPwNGJ5tkH-3kVi7cd7UbuxHl5mJ-ljTLkDBIrUQWehbr_iwjEvbQGDRO7A4chghAgMBAAECgYBfvjvNLwSz0VvSCcc_m21mSfzKRNoZe9eJvMeFt_4Kqp8Oq5S3NmS5Qtz4SudZ7a0WhVtIzfMiCfyfRyGxmv7NjPpNXSFYWnO4KaChk68fHkdko1sKGE4ZySOhMC60YTYcuAh41r29myr2FDXStPjhU4BX8eU1DN6em8MvKpkDLQJBAMN8mY4k59JINf9RZZbTNl8eUTKykXOAlXYRc26FN4selvb_I6PXHkthpsKb1nsnre5qawEhc6OELj1FwZw5mGMCQQCr0ozSN_kzlzKcPqekHecHT-3iuXGc29hhcyoSif5KUqmHUalXQtC0wFS62_JARvsBx0WnKt7NNJXrEoSSh9qrAkEAtkdXk2A8PSqSFvkaBfH57-WABwrUb2PFeas5_CMBsJocYEF1RQ-QMu_iI_JVos5T80yNbCd6AU1-JCoIJxjZSwJAGnQeLjdj7Kd4qUmUMdZQvXV24JNAhK_sToSWk6gfOH4lj6no8oBc9Zcu9F3snCzRdGKjvKsDBoD0G-8L7itwZQJACs4fe3JpGgbx4nnN_cUhwkgNoW3submaufyl7jnVcmAscqGzDRfrIQVH2tgNE_HFq6KAOQOxkNWdPN-bERxQUw";
         System.out.println("公钥:" + publicKey);
         System.out.println("私钥：" + privateKey);
 
         System.out.println("公钥加密——私钥解密");
-        String str = "寒山月初℃";
+        String str = "山重水尽疑无路,String encodedData = RSAUtil.publicEncrypt(str, RSAUtil.getPublicKey(publicKey));,柳暗花明又一村";
         System.out.println("明文：" + str);
         System.out.println("明文大小：" + str.getBytes().length);
         String decodedData = null;

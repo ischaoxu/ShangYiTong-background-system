@@ -31,4 +31,21 @@ public class Knife4jConfig {
 
         return docket;
     }
+    @Bean
+    public Docket docketInner() {
+        //指定使用Swagger2规范
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(new ApiInfoBuilder()
+                        .description("尚医通 APIs")
+                        .description("本文档描述了尚医通微服务内部调用系统接口")
+                        .contact("admin@atguigu.com")
+                        .version("1.0")
+                        .build())
+                //分组名称
+                .groupName("微服务内部调用")
+                .select()
+                .paths(PathSelectors.regex("/inner/.*"))
+                .build();
+        return docket;
+    }
 }

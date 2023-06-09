@@ -76,4 +76,15 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
         }
     }
 
+    @Override
+    public String getNameByCode(String code) {
+        LambdaQueryWrapper<Region> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Region::getCode, code);
+        Region region = baseMapper.selectOne(wrapper);
+        if (region == null) {
+            return "";
+        }
+        return region.getName();
+    }
+
 }

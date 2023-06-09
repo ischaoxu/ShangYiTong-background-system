@@ -1,6 +1,7 @@
 package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.Hospital;
+import org.springframework.data.domain.Page;
 
 import java.util.Map;
 
@@ -23,4 +24,26 @@ public interface HospitalService {
      */
 
     Hospital findHospital(String hoscode);
+
+    /**
+     *  获取医院分页列表
+     * @author liuzhaoxu
+     * @date 2023/6/9 18:30
+     * @param page
+     * @param limit
+     * @param hosname
+     * @return org.springframework.data.domain.Page<com.atguigu.syt.model.hosp.Hospital>
+     */
+
+    Page<Hospital> pageHospital(Integer page, Integer limit, String hosname);
+
+    /**
+     *  修改医院状态
+     * @author liuzhaoxu
+     * @date 2023/6/9 19:36
+     * @param hoscode
+     * @param status
+     */
+
+    void updateStatus(String hoscode, Integer status);
 }

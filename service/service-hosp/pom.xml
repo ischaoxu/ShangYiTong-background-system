@@ -55,6 +55,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>feign-cmn-client</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>
