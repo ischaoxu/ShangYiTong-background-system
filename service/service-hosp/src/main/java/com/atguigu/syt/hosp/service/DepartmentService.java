@@ -1,8 +1,10 @@
 package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.Department;
+import com.atguigu.syt.vo.hosp.DepartmentVo;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface DepartmentService {
@@ -37,4 +39,14 @@ public interface DepartmentService {
     void deleteDepartment(Map<String, Object> paramMap);
 
 
+    /**
+     *  获取医院对应的排班信息
+     * @author liuzhaoxu
+     * @date 2023/6/11 16:52
+     * @param hoscode
+     * @return java.util.List<com.atguigu.syt.vo.hosp.DepartmentVo>
+     */
+
+
+    List<DepartmentVo> getDepartmentByHoscode(String hoscode);
 }

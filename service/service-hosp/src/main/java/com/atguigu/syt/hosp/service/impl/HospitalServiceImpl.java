@@ -79,6 +79,11 @@ public class HospitalServiceImpl implements HospitalService {
         throw  new GuiguException(ResultCodeEnum.PARAM_ERROR);
     }
 
+    @Override
+    public Hospital getHospital(String hoscode) {
+       return hospitalRepository.getByHoscode(hoscode);
+    }
+
     private Hospital packHospital(Hospital hospital) {
         String hostypeString = dictFeignClient.getName(DictTypeEnum.HOSTYPE.getDictTypeId(), hospital.getHostype());
         String provinceString = regionFeignClient.getName(hospital.getProvinceCode());

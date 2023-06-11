@@ -50,6 +50,13 @@ public class AdminHospitalController {
         hospitalService.updateStatus(hoscode, status);
         return Result.ok();
     }
+    @ApiOperation(value = "获取医院详情")
+    @ApiImplicitParam(name = "hoscode",value = "医院编码", required = true)
+    @GetMapping("/show/{hoscode}")
+    public Result<Hospital> show(@PathVariable String hoscode) {
+        Hospital hospital = hospitalService.getHospital(hoscode);
+        return Result.ok(hospital);
+    }
 
 
 }

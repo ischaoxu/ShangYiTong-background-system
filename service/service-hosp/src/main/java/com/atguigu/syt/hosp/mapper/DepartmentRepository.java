@@ -22,10 +22,9 @@ public interface DepartmentRepository extends MongoRepository<Department, Object
     /**
      *  根据医院标识查询所有科室信息
      * @author liuzhaoxu
-     * @date 2023/6/7 20:51
+     * @date 2023/6/11 16:53
      * @param hoscode
      * @return java.util.List<com.atguigu.syt.model.hosp.Department>
      */
-
-    List<Department> findByHoscode(String hoscode);
+    List<Department> getByHoscode(String hoscode);
 }

@@ -30,5 +30,13 @@ public interface HospitalRepository extends MongoRepository<Hospital, ObjectId> 
     Page<Hospital> findByHosnameLike(String hosname, PageRequest pageRequest);
 
 
+    /**
+     *  根据医院hoscode查询医院详细信息
+     * @author liuzhaoxu
+     * @date 2023/6/10 8:39
+     * @param hoscode
+     * @return com.atguigu.syt.model.hosp.Hospital
+     */
 
+    Hospital getByHoscode(String hoscode);
 }

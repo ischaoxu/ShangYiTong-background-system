@@ -46,4 +46,14 @@ public interface HospitalService {
      */
 
     void updateStatus(String hoscode, Integer status);
+
+    /**
+     *  获取医院详情信息
+     * @author liuzhaoxu
+     * @date 2023/6/10 8:38
+     * @param hoscode
+     * @return com.atguigu.syt.model.hosp.Hospital
+     */
+
+    Hospital getHospital(String hoscode);
 }

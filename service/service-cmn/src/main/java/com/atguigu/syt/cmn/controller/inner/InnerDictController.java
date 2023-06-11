@@ -32,11 +32,11 @@ public class InnerDictController {
     public String getName(
             @PathVariable("dictTypeId") Long dictTypeId,
             @PathVariable("value") String value) {
-        try {
-            Thread.sleep(190);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(190);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return dictService.getNameByDictTypeIdAndValue(dictTypeId, value);
     }
 
