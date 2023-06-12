@@ -34,4 +34,12 @@ public interface DictService extends IService<Dict> {
      */
 
     String getNameByDictTypeIdAndValue(Long dictTypeId, String value);
+    /**
+     *  根据字典类型获取医院等级列表
+     * @author liuzhaoxu
+     * @date 2023/6/12 16:54
+     * @param dictTypeId
+     * @return java.util.List<com.atguigu.syt.model.cmn.Dict>
+     */
+    List<Dict> listDictByDictTypeId(Long dictTypeId);
 }

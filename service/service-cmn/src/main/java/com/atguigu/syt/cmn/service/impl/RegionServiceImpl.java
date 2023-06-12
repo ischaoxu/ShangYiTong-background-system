@@ -42,7 +42,6 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
             boolean isHasChildren = region.getLevel().intValue() < 3 ? true : false;
             region.setHasChildren(isHasChildren);
         });
-
         return regionList;
     }
 

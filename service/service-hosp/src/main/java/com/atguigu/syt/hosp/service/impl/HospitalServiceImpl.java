@@ -97,6 +97,7 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.setHosname(hosname);
         hospital.setHostype(hostype);
         hospital.setDistrictCode(districtCode);
+        hospital.setStatus(1);
 //        查询结果
         Example<Hospital> example = Example.of(hospital, exampleMatcher);
         List<Hospital> hospitalList = hospitalRepository.findAll(example, sort);
