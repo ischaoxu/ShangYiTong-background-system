@@ -79,7 +79,7 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public Hospital getHospital(String hoscode) {
-       return hospitalRepository.getByHoscode(hoscode);
+        return this.packHospital(hospitalRepository.getByHoscode(hoscode));
     }
 
     @Override
