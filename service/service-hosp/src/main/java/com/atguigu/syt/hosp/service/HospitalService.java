@@ -3,6 +3,7 @@ package com.atguigu.syt.hosp.service;
 import com.atguigu.syt.model.hosp.Hospital;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Map;
 
 public interface HospitalService {
@@ -56,4 +57,15 @@ public interface HospitalService {
      */
 
     Hospital getHospital(String hoscode);
+
+    /**
+     *  获取医院列表(支持条件查询)
+     * @author liuzhaoxu
+     * @date 2023/6/12 12:49
+     * @param hosname
+     * @param hostype
+     * @param districtCode
+     * @return java.util.List<com.atguigu.syt.model.hosp.Hospital>
+     */
+    List<Hospital> listHospitalSearch(String hosname, String hostype, String districtCode);
 }

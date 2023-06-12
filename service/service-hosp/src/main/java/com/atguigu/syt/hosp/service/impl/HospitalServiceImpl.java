@@ -10,9 +10,7 @@ import com.atguigu.syt.hosp.mapper.HospitalRepository;
 import com.atguigu.syt.hosp.service.HospitalService;
 import com.atguigu.syt.model.hosp.Hospital;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -82,6 +80,30 @@ public class HospitalServiceImpl implements HospitalService {
     @Override
     public Hospital getHospital(String hoscode) {
        return hospitalRepository.getByHoscode(hoscode);
+    }
+
+    @Override
+    public List<Hospital> listHospitalSearch(String hosname, String hostype, String districtCode) {
+//        排序条件
+        Sort sort = Sort.by(Sort.Direction.ASC, "hoscode");
+//        查询模板
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withMatcher("hosname", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withMatcher("hostype", ExampleMatcher.GenericPropertyMatchers.exact())
+                .withMatcher("districtCode", ExampleMatcher.GenericPropertyMatchers.exact())
+                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.exact());
+//        查询条件
+        Hospital hospital = new Hospital();
+        hospital.setHosname(hosname);
+        hospital.setHostype(hostype);
+        hospital.setDistrictCode(districtCode);
+//        查询结果
+        Example<Hospital> example = Example.of(hospital, exampleMatcher);
+        List<Hospital> hospitalList = hospitalRepository.findAll(example, sort);
+//         字典翻译
+        hospitalList.forEach(this::packHospital);
+
+        return hospitalList;
     }
 
     private Hospital packHospital(Hospital hospital) {

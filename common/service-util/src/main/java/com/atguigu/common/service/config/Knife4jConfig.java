@@ -48,4 +48,22 @@ public class Knife4jConfig {
                 .build();
         return docket;
     }
+
+    @Bean
+    public Docket dockerFront() {
+        //指定使用Swagger2规范
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(new ApiInfoBuilder()
+                        .description("尚医通 APIs")
+                        .description("本文档描述了尚医通挂号平台接口")
+                        .contact("admin@atguigu.com")
+                        .version("1.0")
+                        .build())
+                //分组名称
+                .groupName("挂号平台")
+                .select()
+                .paths(PathSelectors.regex("/front/.*"))
+                .build();
+        return docket;
+    }
 }
