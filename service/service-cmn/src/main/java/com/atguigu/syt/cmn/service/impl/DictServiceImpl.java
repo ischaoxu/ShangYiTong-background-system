@@ -1,6 +1,5 @@
 package com.atguigu.syt.cmn.service.impl;
 
-import com.atguigu.common.util.result.Result;
 import com.atguigu.syt.cmn.mapper.DictMapper;
 import com.atguigu.syt.cmn.mapper.DictTypeMapper;
 import com.atguigu.syt.cmn.service.DictService;
@@ -74,6 +73,8 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
 
     @Override
     public List<Dict> listDictByDictTypeId(Long dictTypeId) {
-        return baseMapper.selectList(new LambdaQueryWrapper<Dict>().eq(Dict::getDictTypeId, dictTypeId));
+        LambdaQueryWrapper<Dict> eq = new LambdaQueryWrapper<Dict>();
+        eq.eq(Dict::getDictTypeId, dictTypeId);
+        return baseMapper.selectList(eq);
     }
 }

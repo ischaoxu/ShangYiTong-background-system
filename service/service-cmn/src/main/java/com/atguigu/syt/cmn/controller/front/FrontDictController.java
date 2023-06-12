@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class FrontDictController {
     @ApiOperation(value = "根据数据字典类型id获取数据列表")
     @ApiImplicitParam(name = "dictTypeId", value = "类型id", required = true)
     @GetMapping(value = "/findDictList/{dictTypeId}")
-    public Result<List<Dict>> showDictByDictTypeId(Long dictTypeId){
+    public Result<List<Dict>> showDictByDictTypeId(@PathVariable Long dictTypeId){
         List<Dict> list = dictService.listDictByDictTypeId(dictTypeId);
         return Result.ok(list);
     }
