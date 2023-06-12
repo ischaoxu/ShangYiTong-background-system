@@ -90,8 +90,8 @@ public class HospitalServiceImpl implements HospitalService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withMatcher("hosname", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("hostype", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withMatcher("districtCode", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.exact());
+                .withMatcher("districtCode", ExampleMatcher.GenericPropertyMatchers.exact());
+//                .withMatcher("status", ExampleMatcher.GenericPropertyMatchers.exact());
 //        查询条件
         Hospital hospital = new Hospital();
         hospital.setHosname(hosname);

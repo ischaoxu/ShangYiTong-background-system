@@ -47,6 +47,7 @@ public class HospitalTest {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
             Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put("status",1);
             paramMap.put("hoscode","1000_"+i);
             paramMap.put("hosname",jsonObject.getString("hosname"));
             paramMap.put("hostype",i % 3 == 0 ? 1 : i % 3 == 1 ? 2 :4);
