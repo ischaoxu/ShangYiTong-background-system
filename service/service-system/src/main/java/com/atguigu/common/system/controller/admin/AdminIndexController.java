@@ -1,18 +1,17 @@
 package com.atguigu.common.system.controller.admin;
 
-import com.atguigu.common.system.model.SysUser;
 import com.atguigu.common.service.exception.GuiguException;
+import com.atguigu.common.system.model.SysUser;
 import com.atguigu.common.system.service.SysUserService;
+import com.atguigu.common.system.vo.LoginVo;
 import com.atguigu.common.util.result.Result;
 import com.atguigu.common.util.result.ResultCodeEnum;
 import com.atguigu.common.util.tools.MD5;
-import com.atguigu.common.system.vo.LoginVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +46,7 @@ public class AdminIndexController {
     }*/
     @ApiOperation(value = "登录")
     @PostMapping("/login")
-    public Result login(@RequestBody LoginVo loginVo) {
+    public Result  login(@RequestBody LoginVo loginVo) {
         SysUser sysUser = sysUserService.getByUsername(loginVo.getUsername());
         if(null == sysUser) {
             throw new GuiguException(ResultCodeEnum.ACCOUNT_ERROR);
