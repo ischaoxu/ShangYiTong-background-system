@@ -10,11 +10,21 @@
     </parent>
     <artifactId>feign-client</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>feign-oss-client</module>
+        <module>feign-cmn-client</module>
+    </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

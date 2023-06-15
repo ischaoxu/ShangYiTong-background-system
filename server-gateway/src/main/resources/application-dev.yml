@@ -19,6 +19,9 @@ spring:
         - id: service-user
           predicates: Path=/*/user/**
           uri: lb://service-user
+        - id: service-yun
+          predicates: Path=/*/yun/**
+          uri: lb://service-yun
     nacos:
       discovery:
         server-addr: 192.168.190.101:8848

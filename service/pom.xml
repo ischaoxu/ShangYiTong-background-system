@@ -16,6 +16,7 @@
         <module>service-hosp</module>
         <module>service-cmn</module>
         <module>service-user</module>
+        <module>service-yun</module>
     </modules>
 
     <properties>
@@ -39,7 +40,16 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>feign-cmn-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>feign-oss-client</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 项目打包时会将java目录中的*.xml文件也进行打包 -->

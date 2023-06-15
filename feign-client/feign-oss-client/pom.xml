@@ -9,25 +9,12 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>feign-cmn-client</artifactId>
+    <artifactId>feign-oss-client</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
 
-<!--        &lt;!&ndash;        sentinel依赖&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash;        当前微服务与sentinel通信交互所需依赖&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.csp</groupId>-->
-<!--            <artifactId>sentinel-transport-simple-http</artifactId>-->
-<!--        </dependency>-->
-    </dependencies>
 </project>
