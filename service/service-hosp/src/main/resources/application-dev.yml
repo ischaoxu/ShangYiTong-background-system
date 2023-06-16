@@ -36,7 +36,7 @@ logging:
       mongodb:
         driver:
           protocol:
-            command: debug
+            command: info
   file:
     path: hosp
 

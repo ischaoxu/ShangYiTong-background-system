@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "数据字典")
 @RestController
 @RequestMapping("/inner/cmn/dict")
+@Slf4j
 public class InnerDictController {
     @Autowired
     private DictService dictService;
@@ -32,11 +34,12 @@ public class InnerDictController {
     public String getName(
             @PathVariable("dictTypeId") Long dictTypeId,
             @PathVariable("value") String value) {
-//        try {
-//            Thread.sleep(190);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        log.info("睡眠:300ms");
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return dictService.getNameByDictTypeIdAndValue(dictTypeId, value);
     }
 

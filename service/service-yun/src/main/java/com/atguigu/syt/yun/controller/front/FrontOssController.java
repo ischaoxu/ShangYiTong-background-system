@@ -34,6 +34,7 @@ public class FrontOssController {
     @ApiImplicitParam(name = "file", value = "上传文件", required = true)
     @PostMapping("/auth/upload")
     public Result<Map<String, String>> upload(HttpServletRequest request,MultipartFile file) {
+        //        权限校验
         authUserVerify.checkAuth(request);
         Map<String, String> map = ossService.uploadFile(file);
         return Result.ok(map);

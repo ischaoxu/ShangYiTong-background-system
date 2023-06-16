@@ -9,19 +9,26 @@ import com.atguigu.syt.enums.DictTypeEnum;
 import com.atguigu.syt.hosp.mapper.HospitalRepository;
 import com.atguigu.syt.hosp.service.HospitalService;
 import com.atguigu.syt.model.hosp.Hospital;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * @author liuzhaoxu
  * @date 2023年06月07日 19:19
  */
 @Service
+@Slf4j
 public class HospitalServiceImpl implements HospitalService {
     @Autowired
     private HospitalRepository hospitalRepository;
@@ -102,19 +109,53 @@ public class HospitalServiceImpl implements HospitalService {
         Example<Hospital> example = Example.of(hospital, exampleMatcher);
         List<Hospital> hospitalList = hospitalRepository.findAll(example, sort);
 //         字典翻译
-        hospitalList.forEach(this::packHospital);
 
+        Long a = System.currentTimeMillis();
+        log.info("开始记录：" + a);
+        hospitalList.forEach(this::packHospital);
+        Long b = System.currentTimeMillis();
+        log.info("结束记录：" + b);
+        log.info("字典翻译用时：" + (b - a) + "ms");
         return hospitalList;
     }
+    @Autowired
+    @Qualifier("taskExecutor")
+    private Executor executor;
 
     private Hospital packHospital(Hospital hospital) {
         String hostypeString = dictFeignClient.getName(DictTypeEnum.HOSTYPE.getDictTypeId(), hospital.getHostype());
-        String provinceString = regionFeignClient.getName(hospital.getProvinceCode());
-        String cityString = regionFeignClient.getName(hospital.getCityCode());
-        if(provinceString.equals(cityString)) {cityString = "";}
-        String districtString = regionFeignClient.getName(hospital.getDistrictCode());
         hospital.getParam().put("hostypeString", hostypeString);
-        hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress());
+
+
+        ArrayList<String> params = new ArrayList<>(3);
+        params.add(hospital.getProvinceCode());
+        params.add(hospital.getCityCode());
+        params.add(hospital.getDistrictCode());
+        List<String> nameList = params.stream().map(s -> CompletableFuture.supplyAsync(() -> {
+            String name = regionFeignClient.getName(s);
+            return name;
+        }, executor).exceptionally(e->{
+            log.warn("字典翻译出错："+e.getLocalizedMessage());
+            return null;
+        })).collect(Collectors.toList()).stream().map(name -> name.join()).collect(Collectors.toList());
+        StringBuffer baseAddress = new StringBuffer();
+        if (nameList.get(0).equals(nameList.get(1))) {
+            nameList.remove(1);
+        }
+        nameList.forEach(s->{
+            baseAddress.append(s);
+        });
+
+
+//        String provinceString = regionFeignClient.getName(hospital.getProvinceCode());
+//        String cityString = regionFeignClient.getName(hospital.getCityCode());
+//        if(provinceString.equals(cityString)) {cityString = "";}
+//        String districtString = regionFeignClient.getName(hospital.getDistrictCode());
+//        hospital.getParam().put("fullAddress", provinceString + cityString + districtString + hospital.getAddress());
+
+
+        hospital.getParam().put("fullAddress", baseAddress+ hospital.getAddress());
+
         return hospital;
     }
 }
