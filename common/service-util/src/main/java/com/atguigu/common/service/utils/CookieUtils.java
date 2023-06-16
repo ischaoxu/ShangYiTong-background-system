@@ -1,4 +1,4 @@
-package com.atguigu.syt.user.utils;
+package com.atguigu.common.service.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -3,6 +3,8 @@ package com.atguigu.syt.user.service;
 import com.atguigu.syt.model.user.Patient;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 就诊人表 服务类
@@ -13,4 +15,24 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PatientService extends IService<Patient> {
 
+    /**
+     *  根据id和userid获取就诊人信息
+     * @author liuzhaoxu
+     * @date 2023/6/16 20:13
+     * @param id
+     * @param userId
+     * @return com.atguigu.syt.model.user.Patient
+     */
+
+    Patient getPatient(Long id, Long userId);
+
+    /**
+     *  根据userid获取名下所有就诊人
+     * @author liuzhaoxu
+     * @date 2023/6/16 20:22
+     * @param userId
+     * @return java.util.List<com.atguigu.syt.model.user.Patient>
+     */
+
+    List<Patient> findByUserId(Long userId);
 }

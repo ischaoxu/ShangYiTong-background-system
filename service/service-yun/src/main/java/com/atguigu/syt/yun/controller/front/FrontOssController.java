@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -33,9 +34,11 @@ public class FrontOssController {
     @ApiOperation("文件上传")
     @ApiImplicitParam(name = "file", value = "上传文件", required = true)
     @PostMapping("/auth/upload")
-    public Result<Map<String, String>> upload(HttpServletRequest request,MultipartFile file) {
+    public Result<Map<String, String>> upload(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              MultipartFile file) {
         //        权限校验
-        authUserVerify.checkAuth(request);
+        authUserVerify.checkAuth(request,response);
         Map<String, String> map = ossService.uploadFile(file);
         return Result.ok(map);
     }

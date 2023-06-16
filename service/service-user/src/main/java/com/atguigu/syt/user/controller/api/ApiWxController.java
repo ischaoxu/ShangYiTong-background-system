@@ -2,16 +2,17 @@ package com.atguigu.syt.user.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.atguigu.common.service.exception.GuiguException;
+import com.atguigu.common.service.utils.AuthUserVerify;
 import com.atguigu.common.service.utils.HttpUtil;
 import com.atguigu.common.util.result.ResultCodeEnum;
 import com.atguigu.syt.enums.UserStatusEnum;
 import com.atguigu.syt.model.user.UserInfo;
 import com.atguigu.syt.user.service.UserInfoService;
 import com.atguigu.syt.user.utils.ConstantProperties;
-import com.atguigu.syt.user.utils.CookieUtils;
+import com.atguigu.syt.vo.user.UserVo;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author liuzhaoxu
@@ -40,8 +39,9 @@ public class ApiWxController {
     @Resource
     private UserInfoService userInfoService;
 
-    @Resource
-    private RedisTemplate redisTemplate;
+    @Autowired
+    private AuthUserVerify authUserVerify;
+
 
     /**
      * 登录回调
@@ -117,14 +117,13 @@ public class ApiWxController {
             if (StringUtils.isEmpty(userInfo.getName())) {
                 userInfo.setName(userInfo.getNickName());
             }
-//        生成令牌
-            String token = UUID.randomUUID().toString().replaceAll("-", "");
-            log.info("生成令牌="+token);
-            redisTemplate.opsForValue().set("user:token:" + token, userInfo.getId(), 30, TimeUnit.MINUTES);
-            int cookieMaxTime = 60 * 30;
-            CookieUtils.setCookie(response, "token", token, cookieMaxTime);
-            CookieUtils.setCookie(response, "name", URLEncoder.encode(userInfo.getName()), cookieMaxTime);
-            CookieUtils.setCookie(response, "headimgurl", URLEncoder.encode(userInfo.getHeadImgUrl()), cookieMaxTime);
+//        保存登录状态
+            UserVo userVo = new UserVo();
+            userVo.setUserId(userInfo.getId());
+            userVo.setName(userInfo.getName());
+            userVo.setHeadimgurl(userInfo.getHeadImgUrl());
+            authUserVerify.saveAuth(response, userVo);
+
             return "redirect:" + constantProperties.getSytBaseUrl();
         } catch (GuiguException e) {
             return "redirect:" + constantProperties.getSytBaseUrl() + "?code=201&message=" + URLEncoder.encode(e.getMsg());
@@ -134,4 +133,6 @@ public class ApiWxController {
                     + "?code=201&message="+URLEncoder.encode("登录失败");
         }
     }
+
+
 }

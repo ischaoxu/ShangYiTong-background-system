@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author liuzhaoxu
@@ -30,16 +31,19 @@ public class FrontUserInfoController {
     @ApiOperation(value = "用户认证")
     @ApiImplicitParam(name = "userAuthVo", value = "用户实名认证对象", required = true)
     @PostMapping("/auth/userAuth")
-    public Result userAuth(@RequestBody UserAuthVo userAuthVo, HttpServletRequest request) {
-        Long userId = authUserVerify.checkAuth(request);
+    public Result userAuth(@RequestBody UserAuthVo userAuthVo,
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
+        Long userId = authUserVerify.checkAuth(request,response);
         userInfoService.updateUserInfo(userAuthVo, userId);
         return Result.ok();
     }
     @ApiOperation(value = "获取认证信息")
     @GetMapping("/auth/getUserInfo")
-    public Result<UserInfo> getUserInfo(HttpServletRequest request) {
+    public Result<UserInfo> getUserInfo(HttpServletRequest request,
+                                        HttpServletResponse response) {
 
-        Long userId = authUserVerify.checkAuth(request);
+        Long userId = authUserVerify.checkAuth(request,response);
         UserInfo userInfo = userInfoService.getUserInfoById(userId);
         return Result.ok(userInfo);
     }
