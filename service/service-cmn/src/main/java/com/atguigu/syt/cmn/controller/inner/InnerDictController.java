@@ -34,12 +34,12 @@ public class InnerDictController {
     public String getName(
             @PathVariable("dictTypeId") Long dictTypeId,
             @PathVariable("value") String value) {
-        log.info("睡眠:300ms");
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        log.info("睡眠:300ms");
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return dictService.getNameByDictTypeIdAndValue(dictTypeId, value);
     }
 

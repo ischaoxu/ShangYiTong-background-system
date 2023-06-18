@@ -44,7 +44,7 @@ public class FrontPatientController {
     @PutMapping("/auth/update")
     public Result updatePatient(@RequestBody Patient patient, HttpServletRequest request, HttpServletResponse response) {
         authUserVerify.checkAuth(request, response);
-        patientService.save(patient);
+        patientService.updateById(patient);
         return Result.ok();
     }
     @ApiOperation("根据id获取就诊人信息")
@@ -59,10 +59,17 @@ public class FrontPatientController {
     @ApiOperation("获取就诊人列表")
     @GetMapping("/auth/findAll")
     public Result<List<Patient>> findAll(HttpServletRequest request, HttpServletResponse response) {
-
         Long userId = authUserVerify.checkAuth(request, response);
         List<Patient> list = patientService.findByUserId(userId);
         return Result.ok(list);
     }
 
+    @ApiOperation("根据id删除就诊人信息")
+    @ApiImplicitParam(name = "id",value = "就诊人id", required = true)
+    @DeleteMapping("/auth/remove/{id}")
+    public Result delPatient(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
+        Long userId = authUserVerify.checkAuth(request, response);
+        patientService.removePatient(id, userId);
+        return Result.ok();
+    }
 }

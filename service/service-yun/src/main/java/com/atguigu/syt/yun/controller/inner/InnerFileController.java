@@ -30,12 +30,12 @@ public class InnerFileController {
     @ApiImplicitParam(name = "objectName",value = "文件名", required = true)
     @GetMapping("/getPreviewUrl")
     public String getPreviewUrl(@RequestParam String objectName) {
-        log.info("睡眠:1000ms");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        log.info("睡眠:1000ms");
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         return ossService.getPreviewUrl(objectName);
     }
 }

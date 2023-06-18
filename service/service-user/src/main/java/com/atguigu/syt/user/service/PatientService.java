@@ -35,4 +35,28 @@ public interface PatientService extends IService<Patient> {
      */
 
     List<Patient> findByUserId(Long userId);
+
+    /**
+     *  根据id，userid删除Patient
+     * @author liuzhaoxu
+     * @date 2023/6/17 8:22
+     * @param id
+     * @param userId
+     * @return com.atguigu.syt.model.user.Patient
+     */
+
+     void  removePatient(Long id, Long userId);
+
+    /**
+     *  根据根据用户id获取就诊人列表
+     * @author liuzhaoxu
+     * @date 2023/6/18 23:25
+     * @param userId
+     * @return java.util.List<com.atguigu.syt.model.user.Patient>
+     */
+
+    List<Patient> ListPatientByUserId(Long userId);
+
+    Patient packPatient(Patient patient);
+
 }

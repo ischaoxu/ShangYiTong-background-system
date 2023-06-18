@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2023-06-12
  */
 @Service
- public class PatientServiceImpl extends ServiceImpl<PatientMapper, Patient> implements PatientService {
+public class PatientServiceImpl extends ServiceImpl<PatientMapper, Patient> implements PatientService {
 
     @Autowired
     private DictFeignClient dictFeignClient;
@@ -48,12 +48,25 @@ import java.util.List;
 
         List<Patient> patientList = baseMapper.selectList(queryWrapper);
         patientList.forEach(patient -> {
-            patient.getParam().put("expenseMethod", patient.getIsInsure()==0?"自费":"医保");
+            patient.getParam().put("expenseMethod", patient.getIsInsure() == 0 ? "自费" : "医保");
         });
         return patientList;
     }
 
-    private Patient packPatient(Patient patient) {
+    @Override
+    public void removePatient(Long id, Long userId) {
+        LambdaQueryWrapper<Patient> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Patient::getUserId, userId);
+        wrapper.eq(Patient::getId, id);
+        baseMapper.delete(wrapper);
+    }
+
+    @Override
+    public List<Patient> ListPatientByUserId(Long userId) {
+        return baseMapper.selectList(new LambdaQueryWrapper<Patient>().eq(Patient::getUserId, userId));
+    }
+
+    public Patient packPatient(Patient patient) {
         String certificatesTypeString = dictFeignClient.getName(DictTypeEnum.CERTIFICATES_TYPE.getDictTypeId(), patient.getCertificatesType());
         String contactsCertificatesTypeString = dictFeignClient.getName(
                 DictTypeEnum.CERTIFICATES_TYPE.getDictTypeId(), patient.getContactsCertificatesType());

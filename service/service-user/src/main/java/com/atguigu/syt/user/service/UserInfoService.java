@@ -3,7 +3,11 @@ package com.atguigu.syt.user.service;
 
 import com.atguigu.syt.model.user.UserInfo;
 import com.atguigu.syt.vo.user.UserAuthVo;
+import com.atguigu.syt.vo.user.UserInfoQueryVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -40,4 +44,48 @@ public interface UserInfoService extends IService<UserInfo> {
      */
 
     UserInfo getUserInfoById(Long userId);
+
+    /**
+     *  获取用户分页列表
+     * @author liuzhaoxu
+     * @date 2023/6/18 22:08
+     * @param page
+     * @param limit
+     * @param userInfoQueryVo
+     * @return java.util.List<com.atguigu.syt.model.user.UserInfo>
+     */
+
+    IPage<UserInfo> lisetUserPage(Integer page, Integer limit, UserInfoQueryVo userInfoQueryVo);
+
+    /**
+     *  修改用户状态
+     * @author liuzhaoxu
+     * @date 2023/6/18 23:06
+     * @param userId
+     * @param status
+     * @return boolean
+     */
+
+    boolean lock(Long userId, Integer status);
+
+    /**
+     *   获取用户详情，就诊人信息
+     * @author liuzhaoxu
+     * @date 2023/6/18 23:13
+     * @param userId
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+
+    Map<String, Object> show(Long userId);
+
+    /**
+     *  审核用户
+     * @author liuzhaoxu
+     * @date 2023/6/18 23:28
+     * @param userId
+     * @param authStatus
+     * @return boolean
+     */
+
+    boolean approval(Long userId, Integer authStatus);
 }

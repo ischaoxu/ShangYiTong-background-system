@@ -20,6 +20,6 @@ logging:
 aliyun:
   oss:
     endpoint: oss-cn-chengdu.aliyuncs.com
-    key-id: 
-    key-secret: 
+    key-id: LTAI5tRV1RaGdU6RsEkX8AjV
+    key-secret: 6Qw1KvysQxyN9ZjRYCm9ttjIUZFrul
     bucket-name: kutake-syt

@@ -31,12 +31,12 @@ public class InnerRegionController {
     @ApiImplicitParam(name = "code",value = "值", required = true)
     @GetMapping(value = "/getName/{code}")
     public String getName(@PathVariable("code") String code) {
-        log.info("睡眠:300ms");
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        log.info("睡眠:300ms");
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return regionService.getNameByCode(code);
     }
 }

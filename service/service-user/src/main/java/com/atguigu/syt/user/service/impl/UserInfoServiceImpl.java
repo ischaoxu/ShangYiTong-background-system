@@ -7,18 +7,28 @@ import com.atguigu.syt.cmn.client.DictFeignClient;
 import com.atguigu.syt.enums.AuthStatusEnum;
 import com.atguigu.syt.enums.DictTypeEnum;
 import com.atguigu.syt.enums.UserStatusEnum;
+import com.atguigu.syt.model.user.Patient;
 import com.atguigu.syt.model.user.UserInfo;
 import com.atguigu.syt.oss.client.OssFeignClient;
 import com.atguigu.syt.user.mapper.UserInfoMapper;
+import com.atguigu.syt.user.service.PatientService;
 import com.atguigu.syt.user.service.UserInfoService;
 import com.atguigu.syt.vo.user.UserAuthVo;
+import com.atguigu.syt.vo.user.UserInfoQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -37,6 +47,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private DictFeignClient dictFeignClient;
     @Autowired
     private OssFeignClient ossFeignClient;
+    @Autowired
+    private PatientService patientService;
     @Autowired
     @Qualifier("taskExecutor")
     private Executor executor;
@@ -76,6 +88,71 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         log.info("结束记录：" + b);
         log.info("获取用户信息用时：" + (b - a) + "ms");
         return userInfo1;
+    }
+
+    @Override
+    public IPage<UserInfo> lisetUserPage(Integer page, Integer limit, UserInfoQueryVo userInfoQueryVo) {
+        String keyword = userInfoQueryVo.getKeyword();
+        String createTimeBegin = userInfoQueryVo.getCreateTimeBegin();
+        String createTimeEnd = userInfoQueryVo.getCreateTimeEnd();
+
+        Page<UserInfo> infoPage = new Page<>(page, limit);
+
+        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.and(!StringUtils.isEmpty(keyword),
+                        w -> w.like(UserInfo::getName, keyword)
+                                .or().like(UserInfo::getPhone, keyword))
+                .ge(!StringUtils.isEmpty(createTimeBegin), UserInfo::getCreateTime, createTimeBegin)
+                .le(!StringUtils.isEmpty(createTimeEnd), UserInfo::getCreateTime, createTimeEnd);
+
+        Page<UserInfo> userInfoPage = baseMapper.selectPage(infoPage, wrapper);
+
+        ArrayList<UserInfo> userInfoList = new ArrayList<>();
+
+        for (UserInfo userInfo : userInfoPage.getRecords()) {
+            packUserInfo(userInfo);
+        }
+
+
+        return userInfoPage;
+    }
+
+    @Override
+    public boolean lock(Long userId, Integer status) {
+        if (status == 0 || status == 1) {
+            UserInfo userInfo = baseMapper.selectById(userId);
+            if (userInfo == null) {
+                throw new GuiguException(ResultCodeEnum.FAIL);
+            }
+            userInfo.setStatus(status);
+           return this.updateById(userInfo);
+        }
+        return false;
+    }
+
+    @Override
+    public Map<String, Object> show(Long userId) {
+        UserInfo userInfo = this.getUserInfoById(userId);
+        List<Patient> patientList = patientService.ListPatientByUserId(userId);
+        patientList.forEach(patient -> {
+            patientService.packPatient(patient);
+        });
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userInfo",userInfo);
+        map.put("patientList",patientList);
+        return map;
+    }
+
+    @Override
+    public boolean approval(Long userId, Integer authStatus) {
+        if(authStatus == AuthStatusEnum.AUTH_SUCCESS.getStatus().intValue()
+                || authStatus == AuthStatusEnum.AUTH_FAIL.getStatus().intValue()){
+            UserInfo userInfo = new UserInfo();
+            userInfo.setId(userId);
+            userInfo.setAuthStatus(authStatus);
+            return this.updateById(userInfo);
+        }
+        return false;
     }
 
     private UserInfo packUserInfo(UserInfo userInfo) {

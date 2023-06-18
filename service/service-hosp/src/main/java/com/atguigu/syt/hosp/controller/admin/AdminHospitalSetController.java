@@ -14,8 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +34,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/admin/hosp/hospitalSet")
 public class AdminHospitalSetController {
-    //    static Logger logger= LoggerFactory.getLogger(AdminHospitalSetController.class);
-    static Logger logger = LoggerFactory.getLogger("医院设置管理日志");
 
 
     @Autowired
@@ -47,12 +43,12 @@ public class AdminHospitalSetController {
     @GetMapping("/log")
     public Result log() {
 
-        logger.trace("getHospSet trace");
-        logger.debug("getHospSet debug");
+        log.trace("getHospSet trace");
+        log.debug("getHospSet debug");
 
-        logger.info("getHospSet info");
-        logger.warn("getHospSet warn");
-        logger.error("getHospSet error");
+        log.info("getHospSet info");
+        log.warn("getHospSet warn");
+        log.error("getHospSet error");
 
         return Result.ok();
     }
@@ -61,7 +57,7 @@ public class AdminHospitalSetController {
     @GetMapping("/getHospSet/{id}")
     public Result getHosp(
             @PathVariable("id") Long id) {
-        logger.info("id:" + id + " msg:根据id查询医院设置");
+        log.info("id:" + id + " msg:根据id查询医院设置");
 
         HospitalSet hospitalSet = hospitalSetService.getById(id);
         return Result.ok(hospitalSet);
