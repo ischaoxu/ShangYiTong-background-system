@@ -1,6 +1,7 @@
 package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.Schedule;
+import com.atguigu.syt.vo.hosp.ScheduleOrderVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -85,4 +86,14 @@ public interface ScheduleService {
      */
 
     Schedule getDetailById(String id);
+
+    /**
+     *  获取排版信息
+     * @author liuzhaoxu
+     * @date 2023/6/19 20:12
+     * @param scheduleId
+     * @return com.atguigu.syt.vo.hosp.ScheduleOrderVo
+     */
+
+    ScheduleOrderVo getScheduleOrderVo(String scheduleId);
 }

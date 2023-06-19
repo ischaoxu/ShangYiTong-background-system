@@ -1,6 +1,7 @@
 package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.Hospital;
+import com.atguigu.syt.vo.order.SignInfoVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -68,4 +69,6 @@ public interface HospitalService {
      * @return java.util.List<com.atguigu.syt.model.hosp.Hospital>
      */
     List<Hospital> listHospitalSearch(String hosname, String hostype, String districtCode);
+
+
 }

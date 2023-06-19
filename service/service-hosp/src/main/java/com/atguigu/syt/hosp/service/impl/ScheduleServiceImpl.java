@@ -12,6 +12,7 @@ import com.atguigu.syt.model.hosp.Department;
 import com.atguigu.syt.model.hosp.Hospital;
 import com.atguigu.syt.model.hosp.Schedule;
 import com.atguigu.syt.vo.hosp.BookingScheduleRuleVo;
+import com.atguigu.syt.vo.hosp.ScheduleOrderVo;
 import com.atguigu.syt.vo.hosp.ScheduleRuleVo;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -228,6 +229,37 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findById(new ObjectId(id)).get();
 
         return packSchedule(schedule);
+    }
+
+    @Override
+    public ScheduleOrderVo getScheduleOrderVo(String scheduleId) {
+        Schedule schedule = getDetailById(scheduleId);
+        String hosname = (String)schedule.getParam().get("hosname");
+        String depname = (String)schedule.getParam().get("depname");
+
+        ScheduleOrderVo scheduleOrderVo = new ScheduleOrderVo();
+        scheduleOrderVo.setHoscode(schedule.getHoscode()); //医院编号
+        scheduleOrderVo.setHosname(hosname); //医院名称
+        scheduleOrderVo.setDepcode(schedule.getDepcode()); //科室编号
+        scheduleOrderVo.setDepname(depname); //科室名称
+        scheduleOrderVo.setHosScheduleId(schedule.getHosScheduleId()); //医院端的排班主键
+        scheduleOrderVo.setAvailableNumber(schedule.getAvailableNumber()); //剩余预约数
+        scheduleOrderVo.setTitle(hosname + depname + "挂号费");
+        scheduleOrderVo.setReserveDate(schedule.getWorkDate()); //安排日期
+        scheduleOrderVo.setReserveTime(schedule.getWorkTime()); //安排时间（0：上午 1：下午）
+        scheduleOrderVo.setAmount(schedule.getAmount());//挂号费用
+
+
+        //获取预约规则相关数据
+        Hospital hospital = hospitalRepository.findByHoscode(schedule.getHoscode());
+        BookingRule bookingRule = hospital.getBookingRule();
+        String quitTime = bookingRule.getQuitTime();//退号时间
+        //退号实际时间（如：就诊前一天为-1，当天为0）
+        DateTime quitDay = new DateTime(schedule.getWorkDate()).plusDays(bookingRule.getQuitDay());//退号日期
+        DateTime quitDateTime = this.getDateTime(quitDay, quitTime);//可退号的具体的日期和时间
+        scheduleOrderVo.setQuitTime(quitDateTime.toDate());
+
+        return scheduleOrderVo;
     }
 
     //根据预约规则推算出可以预约的日期集合List<Date>

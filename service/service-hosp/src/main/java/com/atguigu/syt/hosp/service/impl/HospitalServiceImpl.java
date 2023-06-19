@@ -118,6 +118,9 @@ public class HospitalServiceImpl implements HospitalService {
         log.info("字典翻译用时：" + (b - a) + "ms");
         return hospitalList;
     }
+
+
+
     @Autowired
     @Qualifier("taskExecutor")
     private Executor executor;

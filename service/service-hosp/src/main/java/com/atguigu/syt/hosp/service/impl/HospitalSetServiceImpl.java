@@ -6,6 +6,7 @@ import com.atguigu.syt.hosp.mapper.HospitalSetMapper;
 import com.atguigu.syt.hosp.service.HospitalSetService;
 import com.atguigu.syt.model.hosp.HospitalSet;
 import com.atguigu.syt.vo.hosp.HospitalSetQueryVo;
+import com.atguigu.syt.vo.order.SignInfoVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -54,5 +55,15 @@ public class HospitalSetServiceImpl extends ServiceImpl<HospitalSetMapper, Hospi
                 throw new GuiguException(ResultCodeEnum.HOSPITAL_OPEN);
             }
         }
+
+    @Override
+    public SignInfoVo getSinInfovo(String hoscode) {
+        HospitalSet hospitalSet = baseMapper.selectOne(new LambdaQueryWrapper<HospitalSet>().eq(HospitalSet::getHoscode, hoscode));
+        SignInfoVo signInfoVo = new SignInfoVo();
+        signInfoVo.setSignKey(hospitalSet.getSignKey());
+        signInfoVo.setApiUrl(hospitalSet.getApiUrl());
+
+        return signInfoVo;
+    }
 
 }

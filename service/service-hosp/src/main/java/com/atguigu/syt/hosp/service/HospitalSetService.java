@@ -2,6 +2,7 @@ package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.HospitalSet;
 import com.atguigu.syt.vo.hosp.HospitalSetQueryVo;
+import com.atguigu.syt.vo.order.SignInfoVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -36,4 +37,13 @@ public interface HospitalSetService extends IService<HospitalSet> {
 
     HospitalSet getHospitalByHoscode(String hoscode);
 
+    /**
+     *  获取医院的秘钥对象
+     * @author liuzhaoxu
+     * @date 2023/6/19 20:42
+     * @param hoscode
+     * @return com.atguigu.syt.vo.order.SignInfoVo
+     */
+
+    SignInfoVo getSinInfovo(String hoscode);
 }

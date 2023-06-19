@@ -51,6 +51,16 @@
             <artifactId>feign-oss-client</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>feign-user-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>service-hosp-client</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <!-- 项目打包时会将java目录中的*.xml文件也进行打包 -->

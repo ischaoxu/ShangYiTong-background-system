@@ -1,6 +1,6 @@
 package com.atguigu.syt.order.service.impl;
 
-import com.atguigu.syt.order.entity.PaymentInfo;
+import com.atguigu.syt.model.order.PaymentInfo;
 import com.atguigu.syt.order.mapper.PaymentInfoMapper;
 import com.atguigu.syt.order.service.PaymentInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
