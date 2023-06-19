@@ -2,9 +2,9 @@ package com.atguigu.syt.hosp.mapper;
 
 import com.atguigu.syt.model.hosp.Schedule;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ScheduleRepository extends MongoRepository<Schedule, ObjectId> {
@@ -40,5 +40,5 @@ public interface ScheduleRepository extends MongoRepository<Schedule, ObjectId> 
      * @return java.util.List<com.atguigu.syt.model.hosp.Schedule>
      */
 
-    List<Schedule> findByHoscodeAndDepcodeAndWorkDate(String hoscode, String depcode, DateTime parse);
+    List<Schedule> findByHoscodeAndDepcodeAndWorkDate(String hoscode, String depcode, Date parse);
 }

@@ -1,0 +1,35 @@
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:com/atguigu/syt/order/mapper/xml/*.xml
+server:
+  port: 8205
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.190.101:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123456
+    url: jdbc:mysql://localhost:3306/guigu_syt_order?characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+logging:
+  level:
+    root: info
+  file:
+    path: order
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 2000 #连接建立的超时时长，单位是ms，默认1s
+        read-timeout: 2000 #处理请求的超时时间，单位是ms，默认为1s
+
+  sentinel:
+    enabled: true #开启Feign对Sentinel的支持

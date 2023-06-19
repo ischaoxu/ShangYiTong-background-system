@@ -64,4 +64,25 @@ public interface ScheduleService {
      */
 
     List<Schedule> listSchedule(String hoscode, String depcode, String workDate);
+
+    /**
+     *  获取挂号周期信息
+     * @author liuzhaoxu
+     * @date 2023/6/19 8:50
+     * @param hoscode
+     * @param depcode
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    Map<String, Object> getScheduleCycleInfo(String hoscode, String depcode);
+
+
+    /**
+     *  获取预约详情
+     * @author liuzhaoxu
+     * @date 2023/6/19 18:13
+     * @param id
+     * @return com.atguigu.syt.model.hosp.Schedule
+     */
+
+    Schedule getDetailById(String id);
 }
