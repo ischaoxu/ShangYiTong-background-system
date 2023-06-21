@@ -2,6 +2,7 @@ package com.atguigu.syt.hosp.service;
 
 import com.atguigu.syt.model.hosp.Schedule;
 import com.atguigu.syt.vo.hosp.ScheduleOrderVo;
+import com.atguigu.syt.vo.order.OrderMqVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -96,4 +97,13 @@ public interface ScheduleService {
      */
 
     ScheduleOrderVo getScheduleOrderVo(String scheduleId);
+
+    /**
+     *  根据mq消息，修改排班信息
+     * @author liuzhaoxu
+     * @date 2023/6/20 19:42
+     * @param orderMqVo
+     */
+
+    void updateByOrderMqVo(OrderMqVo orderMqVo);
 }

@@ -14,6 +14,7 @@ import com.atguigu.syt.model.hosp.Schedule;
 import com.atguigu.syt.vo.hosp.BookingScheduleRuleVo;
 import com.atguigu.syt.vo.hosp.ScheduleOrderVo;
 import com.atguigu.syt.vo.hosp.ScheduleRuleVo;
+import com.atguigu.syt.vo.order.OrderMqVo;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
@@ -260,6 +261,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleOrderVo.setQuitTime(quitDateTime.toDate());
 
         return scheduleOrderVo;
+    }
+
+    @Override
+    public void updateByOrderMqVo(OrderMqVo orderMqVo) {
+
+        Optional<Schedule> optional= scheduleRepository.findById(new ObjectId(orderMqVo.getScheduleId()));
+        Schedule schedule = optional.get();
+        schedule.setReservedNumber(orderMqVo.getReservedNumber());
+        schedule.setAvailableNumber(orderMqVo.getAvailableNumber());
+        scheduleRepository.save(schedule);
     }
 
     //根据预约规则推算出可以预约的日期集合List<Date>

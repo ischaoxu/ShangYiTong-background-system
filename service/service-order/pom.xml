@@ -17,6 +17,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>rabbit-utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!--微信支付APIv3-->
+        <dependency>
+            <groupId>com.github.wechatpay-apiv3</groupId>
+            <artifactId>wechatpay-java</artifactId>
+            <version>0.2.6</version>
+        </dependency>
+
         <!--实体-->
         <dependency>
             <groupId>com.atguigu</groupId>

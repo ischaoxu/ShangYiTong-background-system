@@ -57,5 +57,14 @@ public class FrontOrderInfoController {
         List<OrderInfo> orderInfolist = orderInfoService.selectList(userId);
         return Result.ok(orderInfolist);
     }
+    @ApiOperation("取消预约")
+    @ApiImplicitParam(name = "outTradeNo",value = "订单id", required = true)
+    @GetMapping("/auth/cancelOrder/{outTradeNo}")
+    public Result cancelOrder(@PathVariable("outTradeNo") String outTradeNo, HttpServletRequest request, HttpServletResponse response) {
+
+        authUserVerify.checkAuth(request, response);
+        orderInfoService.cancelOrder(outTradeNo);
+        return Result.ok().message("预约已取消");
+    }
 
 }

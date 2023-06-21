@@ -10,6 +10,8 @@ public enum OrderStatusEnum {
     PAID(1,"已支付" ),
     GET_NUMBER(2,"已取号" ),
     CANCLE(-1,"取消预约"),
+    CANCLE_UNREFUND(-2,"取消预约，退款中"),
+    CANCLE_REFUND(-3,"取消预约，已退款"),
     ;
 
     private Integer status;

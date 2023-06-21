@@ -45,4 +45,33 @@ public interface OrderInfoService extends IService<OrderInfo> {
      */
 
     List<OrderInfo> selectList(Long userId);
+
+    /**
+     *  根据出纳单号获取订单信息
+     * @author liuzhaoxu
+     * @date 2023/6/20 13:05
+     * @param outTradeNo
+     * @return com.atguigu.syt.model.order.OrderInfo
+     */
+
+    OrderInfo getByOutTradeNo(String outTradeNo);
+
+    /**
+     *  更新订单状态
+     * @author liuzhaoxu
+     * @date 2023/6/20 17:04
+     * @param outTradeNo
+     * @param status
+     */
+
+    void updateStatus(String outTradeNo, Integer status);
+
+    /**
+     *  取消预约
+     * @author liuzhaoxu
+     * @date 2023/6/20 18:07
+ * @param outTradeNo
+     */
+
+    void cancelOrder(String outTradeNo);
 }
