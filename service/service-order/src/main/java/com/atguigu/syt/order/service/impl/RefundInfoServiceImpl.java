@@ -6,11 +6,14 @@ import com.atguigu.syt.model.order.OrderInfo;
 import com.atguigu.syt.model.order.RefundInfo;
 import com.atguigu.syt.order.mapper.RefundInfoMapper;
 import com.atguigu.syt.order.service.RefundInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wechat.pay.java.service.refund.model.Refund;
+import com.wechat.pay.java.service.refund.model.RefundNotification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -35,5 +38,17 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
         refundInfo.setSubject(orderInfo.getTitle());
         refundInfo.setRefundStatus(RefundStatusEnum.UNREFUND.getStatus());//退款中
         baseMapper.insert(refundInfo);
+    }
+
+    @Override
+    public void updateRefundInfoStatus(RefundNotification refundNotification, RefundStatusEnum refund) {
+        String outTradeNo = refundNotification.getOutTradeNo();
+        LambdaQueryWrapper<RefundInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(RefundInfo::getOutTradeNo, outTradeNo);
+        RefundInfo refundInfo = new RefundInfo();
+        refundInfo.setRefundStatus(refund.getStatus());
+        refundInfo.setCallbackContent(refundNotification.toString());
+        refundInfo.setCallbackTime(new Date());
+        baseMapper.update(refundInfo, queryWrapper);
     }
 }

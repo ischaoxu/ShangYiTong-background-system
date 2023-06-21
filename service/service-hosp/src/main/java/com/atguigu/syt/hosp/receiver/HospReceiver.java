@@ -1,5 +1,6 @@
 package com.atguigu.syt.hosp.receiver;
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.syt.hosp.service.ScheduleService;
 import com.atguigu.syt.rabbit.config.MQConst;
 import com.atguigu.syt.vo.order.OrderMqVo;
@@ -33,7 +34,7 @@ public class HospReceiver {
     ))
     public void receive(OrderMqVo orderMqVo){
         //修改排班信息
-        log.info("HospReceiver 监听器监听到消息......");
+        log.info("MQ更新库存:"+ JSONObject.toJSONString(orderMqVo));
         scheduleService.updateByOrderMqVo(orderMqVo);
     }
 }

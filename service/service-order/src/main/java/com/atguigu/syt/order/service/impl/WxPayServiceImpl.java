@@ -169,6 +169,7 @@ public class WxPayServiceImpl implements WxPayService {
         try {
             CreateRequest request = new CreateRequest();
             // 调用request.setXxx(val)设置所需参数，具体参数可见Request定义
+            request.setNotifyUrl(wxpayProperties.getNotifyRefundUrl());
             request.setOutTradeNo(outTradeNo);
             request.setOutRefundNo("TK_" + outTradeNo);
             AmountReq amount = new AmountReq();
@@ -214,6 +215,4 @@ ABNORMAL：退款异常
         }
     }
 
-
-//    CreateRequest request = new CreateRequest();
 }

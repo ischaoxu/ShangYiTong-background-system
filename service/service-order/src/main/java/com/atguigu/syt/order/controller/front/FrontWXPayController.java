@@ -6,6 +6,7 @@ import com.atguigu.syt.order.service.WxPayService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,15 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = "微信支付接口")
 @RestController
 @RequestMapping("/front/order/wxpay")
+@Slf4j
 public class FrontWXPayController {
     @Autowired
     private WxPayService wxPayService;
 
     @Autowired
     private AuthUserVerify authUserVerify;
+
+
 
     @ApiOperation("获取支付二维码url")
     @ApiImplicitParam(name = "outTradeNo",value = "订单号", required = true)
@@ -53,7 +57,6 @@ public class FrontWXPayController {
         }
         return Result.ok().message("支付中").code(250);
     }
-
 
 
 }

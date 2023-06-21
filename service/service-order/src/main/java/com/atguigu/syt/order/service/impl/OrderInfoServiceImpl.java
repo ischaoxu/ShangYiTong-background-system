@@ -164,8 +164,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         rabbitService.sendMessage(
                 MQConst.EXCHANGE_DIRECT_ORDER,
                 MQConst.ROUTING_ORDER,
-                scheduleId
+                orderMqVo
                 );
+
+
+
         //目的2：给就诊人发短信 TODO：MQ
 
         //返回订单id
@@ -234,6 +237,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         if (jsonResult.getInteger("code") != 200) {
             throw new GuiguException(ResultCodeEnum.CANCEL_ORDER_FAIL);
         }
+
+
     }
 
     /**
