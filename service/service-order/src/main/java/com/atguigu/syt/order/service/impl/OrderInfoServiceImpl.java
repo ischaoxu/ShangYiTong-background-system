@@ -165,12 +165,28 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 MQConst.EXCHANGE_DIRECT_ORDER,
                 MQConst.ROUTING_ORDER,
                 orderMqVo
-                );
+        );
 
 
-
-        //目的2：给就诊人发短信 TODO：MQ
-
+////目的2：给就诊人发短信
+////组装短信消息对象
+//        SmsVo smsVo = new SmsVo();
+//        smsVo.setPhone(orderInfo.getPatientPhone());
+////亲爱的用户：您已预约%{hosname}%{hosdepname}%{date}就诊
+////请您于%{time}至%{address}取号，
+////您的就诊号码是%{number}，请您及时就诊
+//        smsVo.setTemplateCode("和客服申请模板编号");
+//        Map<String, Object> paramsSms = new HashMap<String, Object>() {{
+//            put("hosname", orderInfo.getHosname());
+//            put("hosdepname", orderInfo.getDepname());
+//            put("date", new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd"));
+//            put("time", orderInfo.getFetchTime());
+//            put("address", orderInfo.getFetchAddress());
+//            put("number", orderInfo.getNumber());
+//        }};
+//        smsVo.setParam(paramsSms);
+////向MQ发消息
+//        rabbitService.sendMessage(MQConst.EXCHANGE_DIRECT_SMS, MQConst.ROUTING_SMS, smsVo);
         //返回订单id
         return orderInfo.getId();
     }
@@ -237,6 +253,35 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         if (jsonResult.getInteger("code") != 200) {
             throw new GuiguException(ResultCodeEnum.CANCEL_ORDER_FAIL);
         }
+
+        //获取返回数据
+        JSONObject jsonObject = jsonResult.getJSONObject("data");
+        Integer reservedNumber = jsonObject.getInteger("reservedNumber");
+        Integer availableNumber = jsonObject.getInteger("availableNumber");
+
+//目的1：更新mongodb数据库中的排班数量
+//组装数据同步消息对象
+        OrderMqVo orderMqVo = new OrderMqVo();
+        orderMqVo.setAvailableNumber(availableNumber);
+        orderMqVo.setReservedNumber(reservedNumber);
+        orderMqVo.setScheduleId(orderInfo.getScheduleId());
+//发消息
+        rabbitService.sendMessage(MQConst.EXCHANGE_DIRECT_ORDER, MQConst.ROUTING_ORDER, orderMqVo);
+
+////目的2：给就诊人发短信
+////组装短信消息对象
+//        SmsVo smsVo = new SmsVo();
+//        smsVo.setPhone(orderInfo.getPatientPhone());
+////亲爱的用户：您已取消%{hosname}%{hosdepname}%{date}就诊
+//        smsVo.setTemplateCode("和客服申请模板编号");
+//        Map<String, Object> paramsSms = new HashMap<String, Object>() {{
+//            put("hosname", orderInfo.getHosname());
+//            put("hosdepname", orderInfo.getDepname());
+//            put("date", new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd"));
+//        }};
+//        smsVo.setParam(paramsSms);
+////向MQ发消息
+//        rabbitService.sendMessage(MQConst.EXCHANGE_DIRECT_SMS, MQConst.ROUTING_SMS, smsVo);
 
 
     }

@@ -7,6 +7,7 @@ import com.atguigu.syt.user.service.UserInfoService;
 import com.atguigu.syt.vo.user.UserAuthVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,16 @@ public class FrontUserInfoController {
         Long userId = authUserVerify.checkAuth(request,response);
         UserInfo userInfo = userInfoService.getUserInfoById(userId);
         return Result.ok(userInfo);
+    }
+    @ApiOperation("绑定手机号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phone",value = "手机号", required = true),
+            @ApiImplicitParam(name = "code",value = "验证码", required = true)})
+    @PostMapping("/auth/bindPhone/{phone}/{code}")
+    public Result bindPhone(@PathVariable String phone, @PathVariable String code, HttpServletRequest request, HttpServletResponse response) {
+
+        Long userId = authUserVerify.checkAuth(request, response);
+        userInfoService.bindPhone(userId, phone, code);
+        return Result.ok().message("绑定成功");
     }
 }

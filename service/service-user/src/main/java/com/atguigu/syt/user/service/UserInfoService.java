@@ -88,4 +88,15 @@ public interface UserInfoService extends IService<UserInfo> {
      */
 
     boolean approval(Long userId, Integer authStatus);
+
+    /**
+     *  绑定手机号
+     * @author liuzhaoxu
+     * @date 2023/6/21 18:17
+     * @param userId
+     * @param phone
+     * @param code
+     */
+
+    void bindPhone(Long userId, String phone, String code);
 }

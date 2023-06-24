@@ -32,7 +32,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/order/wxpay")
 @Slf4j
-public class WXPayController {
+public class APIWXPayController {
 
     @Autowired
     private OrderInfoService orderInfoService;
@@ -66,7 +66,7 @@ public class WXPayController {
             //请求体
             String requestBody = RequestUtils.readData(request);
 
-            RequestParam requestParam = new com.wechat.pay.java.core.notification.RequestParam.Builder()
+            RequestParam requestParam = new RequestParam.Builder()
                     .serialNumber(wechatPayCertificateSerialNumber)
                     .nonce(nonce)
                     .signature(signature)

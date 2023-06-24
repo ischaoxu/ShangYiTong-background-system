@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -49,6 +50,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private OssFeignClient ossFeignClient;
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     @Qualifier("taskExecutor")
     private Executor executor;
@@ -153,6 +157,36 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
             return this.updateById(userInfo);
         }
         return false;
+    }
+
+    @Override
+    public void bindPhone(Long userId, String phone, String code) {
+        //校验参数
+        if(StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
+            throw new GuiguException(ResultCodeEnum.PARAM_ERROR);
+        }
+
+        //校验验证码
+        String phoneCode = (String)redisTemplate.opsForValue().get("code:" + phone);
+        if(!code.equals(phoneCode)) {
+            throw new GuiguException(ResultCodeEnum.CODE_ERROR);
+        }
+
+        //根据手机号查找会员
+        LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
+        //手机号没有被其他人绑定过
+        queryWrapper.eq(UserInfo::getPhone, phone).ne(UserInfo::getId, userId);
+        UserInfo userInfo = baseMapper.selectOne(queryWrapper);
+
+        //手机号已存在
+        if(userInfo != null) {
+            throw new GuiguException(ResultCodeEnum.REGISTER_MOBILE_ERROR);
+        }
+        //设置绑定手机号
+        userInfo = new UserInfo();
+        userInfo.setId(userId);
+        userInfo.setPhone(phone);
+        baseMapper.updateById(userInfo);
     }
 
     private UserInfo packUserInfo(UserInfo userInfo) {
