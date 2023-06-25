@@ -18,6 +18,7 @@ import com.atguigu.syt.user.client.UserFeignClient;
 import com.atguigu.syt.vo.hosp.ScheduleOrderVo;
 import com.atguigu.syt.vo.order.OrderMqVo;
 import com.atguigu.syt.vo.order.SignInfoVo;
+import com.atguigu.syt.vo.sms.SmsVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -107,10 +105,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         paramsMap.put("hoscode", scheduleOrderVo.getHoscode());
         paramsMap.put("depcode", scheduleOrderVo.getDepcode());
         paramsMap.put("hosScheduleId", scheduleOrderVo.getHosScheduleId());
-        paramsMap.put(
-                "reserveDate",
-                new DateTime(scheduleOrderVo.getReserveDate()).toString("yyyy-MM-dd")
-        );
+        paramsMap.put("reserveDate", new DateTime(scheduleOrderVo.getReserveDate()).toString("yyyy-MM-dd"));
         paramsMap.put("reserveTime", scheduleOrderVo.getReserveTime());
         paramsMap.put("amount", scheduleOrderVo.getAmount());
         paramsMap.put("name", patient.getName());
@@ -123,17 +118,12 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         paramsMap.put("timestamp", HttpRequestHelper.getTimestamp());
 
         paramsMap.put("sign", HttpRequestHelper.getSign(paramsMap, signInfoVo.getSignKey()));//标准签名
-        JSONObject jsonResult = HttpRequestHelper.sendRequest(
-                paramsMap, signInfoVo.getApiUrl() + "/order/submitOrder"
-        );
+        JSONObject jsonResult = HttpRequestHelper.sendRequest(paramsMap, signInfoVo.getApiUrl() + "/order/submitOrder");
         log.info("结果：" + jsonResult.toJSONString());
 
         if (jsonResult.getInteger("code") != 200) {//失败
 
-            log.error("预约失败，"
-                    + "code：" + jsonResult.getInteger("code")
-                    + "，message：" + jsonResult.getString("message")
-            );
+            log.error("预约失败，" + "code：" + jsonResult.getInteger("code") + "，message：" + jsonResult.getString("message"));
             throw new GuiguException(ResultCodeEnum.FAIL.getCode(), jsonResult.getString("message"));
         }
 
@@ -161,11 +151,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         orderMqVo.setReservedNumber(reservedNumber);
         orderMqVo.setAvailableNumber(availableNumber);
         orderMqVo.setScheduleId(scheduleId);
-        rabbitService.sendMessage(
-                MQConst.EXCHANGE_DIRECT_ORDER,
-                MQConst.ROUTING_ORDER,
-                orderMqVo
-        );
+        rabbitService.sendMessage(MQConst.EXCHANGE_DIRECT_ORDER, MQConst.ROUTING_ORDER, orderMqVo);
 
 
 ////目的2：给就诊人发短信
@@ -232,10 +218,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 //        判断订单状态
         int status = orderInfo.getOrderStatus().intValue();
         if (status == OrderStatusEnum.PAID.getStatus()) {
-//   退款
+            //   退款
             wxPayService.refund(outTradeNo);
 //            修改状态
-            orderInfo.setOrderStatus(OrderStatusEnum.CANCLE.getStatus());
+            orderInfo.setOrderStatus(OrderStatusEnum.CANCLE_UNREFUND.getStatus());
             baseMapper.updateById(orderInfo);
         } else {
 //            修改状态
@@ -286,6 +272,36 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     }
 
+    @Override
+    public void patientAdvice() {
+        LambdaQueryWrapper<OrderInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(OrderInfo::getReserveDate, new DateTime().plusDays(1).toString("yyyy-HH-mm"));
+        ArrayList<Object> list = new ArrayList<>();
+        list.add(OrderStatusEnum.PAID);
+        list.add(OrderStatusEnum.GET_NUMBER);
+        wrapper.in(OrderInfo::getOrderStatus, list);
+
+        List<OrderInfo> orderInfoList = baseMapper.selectList(wrapper);
+
+        for (OrderInfo orderInfo : orderInfoList) {
+            //短信对象
+            SmsVo smsVo = new SmsVo();
+            smsVo.setPhone(orderInfo.getPatientPhone());
+            //就诊提醒：您已预约%{hosname}%{depname}的号源，就诊时间：%{date}，就诊人%{name}，请您合理安排出行时间
+            smsVo.setTemplateCode("和客服申请模板编号");
+            Map<String,Object> paramsSms = new HashMap<String, Object>(){{
+                put("hosname", orderInfo.getHosname());
+                put("hosdepname", orderInfo.getDepname());
+                put("date", new DateTime(orderInfo.getReserveDate()).toString("yyyy-MM-dd"));
+                put("name", orderInfo.getPatientName());
+            }};
+            smsVo.setParam(paramsSms);
+            //发消息
+            rabbitService.sendMessage(MQConst.EXCHANGE_DIRECT_SMS, MQConst.ROUTING_SMS, smsVo);
+
+        }
+    }
+
     /**
      * 封装订单数据
      *
@@ -293,10 +309,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
      * @return
      */
     private OrderInfo packOrderInfo(OrderInfo orderInfo) {
-        orderInfo.getParam().put(
-                "orderStatusString",
-                OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus())
-        );
+        orderInfo.getParam().put("orderStatusString", OrderStatusEnum.getStatusNameByStatus(orderInfo.getOrderStatus()));
         return orderInfo;
     }
 

@@ -74,4 +74,12 @@ public interface OrderInfoService extends IService<OrderInfo> {
      */
 
     void cancelOrder(String outTradeNo);
+
+    /**
+     *  定时短信通知就诊人
+     * @author liuzhaoxu
+     * @date 2023/6/25 17:51
+     */
+
+    void patientAdvice();
 }

@@ -168,6 +168,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
         //校验验证码
         String phoneCode = (String)redisTemplate.opsForValue().get("code:" + phone);
+        if (phoneCode == null) {
+            throw new GuiguException(ResultCodeEnum.CODE_ERROR.getCode(),"验证码过期");
+        }
+
         if(!code.equals(phoneCode)) {
             throw new GuiguException(ResultCodeEnum.CODE_ERROR);
         }

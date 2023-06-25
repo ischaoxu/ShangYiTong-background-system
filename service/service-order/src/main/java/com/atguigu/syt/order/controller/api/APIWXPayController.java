@@ -46,7 +46,8 @@ public class APIWXPayController {
 
         log.info("退款通知执行");
 
-        Map<String, String> map = new HashMap<>();//应答对象
+        //应答对象
+        Map<String, String> map = new HashMap<>(2);
 
         try {
 
